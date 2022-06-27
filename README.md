@@ -30,7 +30,11 @@
 
 ## Class Behavior/Development Notes
 - In addition to the notes provided, some assumptions were made in the development as listed below:
+
 -- One Publisher object should be used per device, this ensures that even if messages are interrupted, they can still work as expected.
+
 -- The message will print with either 'None' for speed, or the last known speed, even if it was many messages ago.
+
 -- A speed's timestamp will be used to ensure that newer messages are not out of order.
+
 -- When faced with corrupted data, the message 'Error detected' will be printed out before stopping further stream data processing.
