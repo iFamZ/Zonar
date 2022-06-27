@@ -4,6 +4,8 @@
 1. Clone the Zonar repository
 `git clone https://github.com/iFamZ/Zonar.git`
 
+3. Navigate to the `utility` directory
+
 2. Run the unit tests - grab the absolute path of `test_publisher.py` and execute the following
 `python3 -m unittest [absolute path of test_publisher]
 
