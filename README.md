@@ -1,5 +1,12 @@
 # Zonar
 
+## Installation
+1. Clone the Zonar repository
+`git clone https://github.com/iFamZ/Zonar.git`
+
+2. Run the unit tests - grab the absolute path of `test_publisher.py` and execute the following
+`python3 -m unittest [absolute path of test_publisher]
+
 ## Publisher class
 - Several additional paramters and functions have been added to the publisher class, going beyond what was initially requested. Specifically, the class has two class member variables, namely `data_dict`, a dictionary which is passed to the `publish` function for printing, and another variable `last_ts`, used to hold the last known timestamp prior to `publish` because the `data_dict` is reset after publish. `last_ts` allows us to ensure that data coming in after publish still maintains order.
 
