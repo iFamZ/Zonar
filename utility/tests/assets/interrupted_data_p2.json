@@ -1,0 +1,35 @@
+{
+    "type": "interrupted data part 2 - starts with longitude - matches part 1 latitude",
+    "data": [
+        {
+            "ts": 1650500052,
+            "k": "longitude",
+            "v": "-122.335145"
+        },
+        {
+            "ts": 1650500053,
+            "k": "longitude",
+            "v": "-122.335167"
+        },
+        {
+            "ts": 1650500053,
+            "k": "speed",
+            "v": "60.45"
+        },
+        {
+            "ts": 1650500055,
+            "k": "latitude",
+            "v": "47.608013"
+        },
+        {
+            "ts": 1650500055,
+            "k": "longitude",
+            "v": "-122.335160"
+        },
+        {
+            "ts": 1650500052,
+            "k": "latitude",
+            "v": "47.608049"
+        }
+    ]
+}

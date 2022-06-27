@@ -1,0 +1,2 @@
+{'latitude': '47.608013', 'longitude': '-122.335167', 'speed': None, 'ts': 1650500050}
+Error detected
