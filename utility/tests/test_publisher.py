@@ -1,10 +1,7 @@
 import unittest
 from unittest import mock
-import os, tempfile, shutil, json, io
+import os, tempfile, shutil, json
 from utility.publisher import Publisher
-
-# instead of calling publish - mock that to call a different function which writes that message
-# to a text file so we can compare it later
 
 class TestPublisher(unittest.TestCase):
     '''
@@ -22,6 +19,10 @@ class TestPublisher(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     def new_publish(self, data: dict):
+        '''
+        the unit test reroutes Publisher.publish() and Publisher._print_error() calls to new_publish 
+        so that those messages are written to file
+        '''
         with open(self.output_file, 'a') as file:
             print('data: {}'.format(data) )
             file.write('{}\n'.format(str(data)))
@@ -37,6 +38,10 @@ class TestPublisher(unittest.TestCase):
         self.assert_files_match(expected_output_file)
 
     def assert_files_match(self, expected_output_file) -> None:
+        '''
+        asserts that two files match - uses a list to hold the lines so that we get
+        detailed information of mismatches
+        '''
         with open(self.output_file) as f:
             output_list = f.readlines()
         with open(expected_output_file) as f:
@@ -44,6 +49,9 @@ class TestPublisher(unittest.TestCase):
         self.assertListEqual(output_list, expected_list)
 
     def get_input_data(self, asset_name: str) -> dict:
+        '''
+        returns the json object as a python dictionary
+        '''
         with open(os.path.join(self.assets, asset_name)) as f:
             input_json = json.load(f)
         return input_json
@@ -61,38 +69,32 @@ class TestPublisher(unittest.TestCase):
         tests that the no publish functionality of translate is working as expected
         - we have nothing published because there is no latitude and longitude match
         '''
-        print('running no publish')
         input_stream = self.get_input_data('no_publish.json')['data']
         publisher = Publisher()
         publisher.translate(input_stream)
         self.assertEqual(len(os.listdir(self.test_dir)), 0)
 
     def test_translate_out_of_order(self) -> None:
-        print('running out of order')
         input_stream = self.get_input_data('out_of_order.json')['data']
         expected_output_file = os.path.join(self.assets, 'out_of_order_expected.txt')
         self.run_translate(input_stream, expected_output_file)
 
     def test_translate_overwrite_timestamp(self) -> None:
-        print('running overwrite timestamp')
         input_stream = self.get_input_data('overwrite_old_timestamp_data.json')['data']
         expected_output_file = os.path.join(self.assets, 'overwrite_old_timestamp_data_expected.txt')
         self.run_translate(input_stream, expected_output_file)
 
     def test_translate_speed_first(self) -> None:
-        print('running speed first')
         input_stream = self.get_input_data('speed_first.json')['data']
         expected_output_file = os.path.join(self.assets, 'speed_first_expected.txt')
         self.run_translate(input_stream, expected_output_file)
 
     def test_translate_corrupted_data(self) -> None:
-        print('running corrupted data')
         input_stream = self.get_input_data('corrupted_data.json')['data']
         expected_output_file = os.path.join(self.assets, 'corrupted_data_expected.txt')
         self.run_translate(input_stream, expected_output_file)
 
     def test_translate_interrupted_data(self) -> None:
-        print('running interrupted data')
         publisher = Publisher()
         input_stream1 = self.get_input_data('interrupted_data_p1.json')['data']
         expected_output_file1 = os.path.join(self.assets, 'interrupted_data_p1_expected.txt')

@@ -1,5 +1,3 @@
-import json, os
-
 class Publisher:
 
     def __init__(self):
@@ -16,9 +14,15 @@ class Publisher:
         pass
 
     def _print_error(self, message: str) -> None:
+        '''
+        print the error messages as requested
+        '''
         print(message)
 
     def _clear_data_dict(self):
+        '''
+        resets the class member variable, data_dict, after publishing a message
+        '''
         for k in ['latitude', 'longitude', 'ts']:
             self.data_dict[k] = None
 
@@ -55,7 +59,6 @@ class Publisher:
             elif data_type == 'longitude':
                 opp_data_type = 'latitude'
             # if one exists and the other is read in
-            # if data_type == 'latitude' and self.data_dict['longitude'] or data_type == 'longitude' and self.data_dict['latitude']:
             if data_type in ['latitude', 'longitude'] and self.data_dict[opp_data_type]:
                 if data['ts'] == self.data_dict['ts']:
                     # publish + clear
@@ -64,15 +67,16 @@ class Publisher:
                     self.publish(self.data_dict)
                     self._clear_data_dict()
                 elif data['ts'] > self.data_dict['ts']:
-                    # overwrite
+                    # overwrite old data
                     self.data_dict[opp_data_type] = None
                     self.data_dict[data_type] = data['v']
                     self.data_dict['ts'] = data['ts']
                 else:
+                    # out of order
                     self._print_error('Out of order detected')
             elif data_type in ['latitude', 'longitude']:
-                # no data exists or a new value of an existing param is read in
                 if self.last_ts and data['ts'] < self.last_ts:
+                    # data coming in is older than previously processed data
                     self._print_error('Out of order detected')
                 elif not self.data_dict['ts']:
                     # if no timestamp was recorded (no data has been stored yet)
@@ -85,7 +89,7 @@ class Publisher:
                     self.data_dict[data_type] = data['v']
                     self.data_dict['ts'] = data['ts']
                 else:
-                    # data coming in is older than previous data
+                    # data coming in is older than current data
                     self._print_error('Out of order detected')
             else:
                 # data type is speed - matching latitude and longitude will print the last known
